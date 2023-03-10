@@ -1,69 +1,72 @@
 ---
 name: Test
-"on":
+on:
   pull_request:
   push:
     branches:
       - master
 
 jobs:
-  vagrant:
-    name: Vagrant
+  molecule:
+    name: Molecule
     runs-on: macos-12
 
+    strategy:
+      matrix:
+        scenario:
+          - default
+          - ipv6
+          - single_node
+      fail-fast: false
     env:
-      HOMEBREW_NO_INSTALL_CLEANUP: 1
-      VAGRANT_CWD: ${{ github.workspace }}/vagrant
+      PYTHON_VERSION: "3.10"
 
     steps:
       - name: Check out the codebase
-        uses: actions/checkout@v2
-
-      - name: Install Ansible
-        run: brew install ansible
-
-      - name: Install role dependencies
-        run: ansible-galaxy install -r collections/requirements.yml
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # 3.0.2
 
       - name: Configure VirtualBox
-        run: >-
-          sudo mkdir -p /etc/vbox &&
-          echo "* 192.168.30.0/24" | sudo tee -a /etc/vbox/networks.conf > /dev/null
+        run: |-
+          sudo mkdir -p /etc/vbox
+          cat <<EOF | sudo tee -a /etc/vbox/networks.conf > /dev/null
+          * 192.168.30.0/24
+          * fdad:bad:ba55::/64
+          EOF
 
       - name: Cache Vagrant boxes
-        uses: actions/cache@v3
+        uses: actions/cache@fd5de65bc895cf536527842281bea11763fefd77 # 3.0.8
         with:
           path: |
             ~/.vagrant.d/boxes
-          key: vagrant-boxes-${{ hashFiles('**/Vagrantfile') }}
+          key: vagrant-boxes-${{ hashFiles('**/molecule.yml') }}
           restore-keys: |
             vagrant-boxes
 
-      - name: Create virtual machines
-        run: vagrant up
-        timeout-minutes: 10
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Provision cluster using Ansible
-        # Since Ansible sets up _all_ machines, it is sufficient to run it only
-        # once (i.e, for a single node - we are choosing control1 here)
-        run: vagrant provision control1 --provision-with ansible
-        timeout-minutes: 25
+      - name: Install dependencies
+        run: >-
+          python3 -m pip install --upgrade pip &&
+          python3 -m pip install -r requirements.txt
 
-      - name: Set up kubectl on the host
-        run: brew install kubectl &&
-          mkdir -p ~/.kube &&
-          vagrant ssh control1 --command "cat ~/.kube/config" > ~/.kube/config
+      - name: Test with molecule
+        run: molecule test --scenario-name ${{ matrix.scenario }}
+        env:
+          ANSIBLE_K3S_LOG_DIR: ${{ runner.temp }}/logs/k3s-ansible/${{ matrix.scenario }}
+          ANSIBLE_SSH_RETRIES: 4
+          ANSIBLE_TIMEOUT: 60
 
-      - name: Show cluster nodes
-        run: kubectl describe -A nodes
-
-      - name: Show cluster pods
-        run: kubectl describe -A pods
-
-      - name: Test cluster
-        run: $VAGRANT_CWD/test_cluster.py --verbose --locals
-        timeout-minutes: 5
-
-      - name: Destroy virtual machines
+      - name: Upload log files
         if: always() # do this even if a step before has failed
-        run: vagrant destroy --force
+        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # 3.1.0
+        with:
+          name: logs
+          path: |
+            ${{ runner.temp }}/logs
+
+      - name: Delete old box versions
+        if: always() # do this even if a step before has failed
+        run: vagrant box prune --force
