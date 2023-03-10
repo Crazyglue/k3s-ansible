@@ -1,0 +1,25 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rockergaming-api
+  namespace: rockergaming
+  labels:
+    app: rockergaming-api
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rockergaming-api
+  template:
+    metadata:
+      labels:
+        app: rockergaming-api
+    spec:
+      containers:
+      - name: rockergaming-api
+        image: registry.lab.rockergaming.com/rockergaming/api:0.0.3

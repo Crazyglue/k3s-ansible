@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ds-devops-landing-page
+  namespace: ds-devops
+spec:
+  selector:
+    app: ds-devops-landing-page
+  ports:
+  - name: http
+    targetPort: 80
+    port: 80

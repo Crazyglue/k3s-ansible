@@ -1,0 +1,26 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: dobroveanu-cloud-pizza
+  namespace: dobroveanu-cloud
+  labels:
+    app: dobroveanu-cloud-pizza
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: dobroveanu-cloud-pizza
+  template:
+    metadata:
+      labels:
+        app: dobroveanu-cloud-pizza
+    spec:
+      containers:
+      - name: dobroveanu-cloud-pizza
+        image: registry.lab.rockergaming.com/pizza/cheat-za:0.1.2
+        imagePullPolicy: Always

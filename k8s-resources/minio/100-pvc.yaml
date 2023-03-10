@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: s3-nfs
+  namespace: rockergaming
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "slow"
+  resources:
+    requests:
+      storage: 50Gi
+  volumeName: truenas-rockergaming-s3

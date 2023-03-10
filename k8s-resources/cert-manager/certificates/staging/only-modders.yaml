@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: only-modders
+  namespace: only-modders
+spec:
+  secretName: only-modders-staging-tls
+  issuerRef:
+    name: letsencrypt-only-modders-staging
+    kind: ClusterIssuer
+  commonName: "*.onlymodders.com"
+  dnsNames:
+  - "onlymodders.com"
+  - "*.onlymodders.com"

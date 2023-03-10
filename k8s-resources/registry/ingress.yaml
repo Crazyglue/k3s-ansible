@@ -1,0 +1,33 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: container-registry
+  namespace: container-registry
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+    # - registry
+  routes:
+    - match: Host(`www.registry.lab.rockergaming.com`)
+      kind: Rule
+      services:
+        - name: container-registry
+          port: 80
+          namespace: container-registry
+    - match: Host(`registry.lab.rockergaming.com`)
+      kind: Rule
+      services:
+        - name: container-registry
+          port: 80
+          namespace: container-registry
+    # - match: Host(`registry.lab.rockergaming.com`)
+    #   kind: Rule
+    #   services:
+    #     - name: container-registry
+    #       port: 5000
+    #       namespace: container-registry
+  tls:
+    secretName: lab-rockergaming-com-tls

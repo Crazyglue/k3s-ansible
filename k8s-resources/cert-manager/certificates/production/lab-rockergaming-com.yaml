@@ -1,0 +1,60 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: lab-rockergaming-com
+  namespace: default
+spec:
+  secretName: lab-rockergaming-com-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "*.lab.rockergaming.com"
+  dnsNames:
+  - "lab.rockergaming.com"
+  - "*.lab.rockergaming.com"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: lab-rockergaming-com
+  namespace: container-registry
+spec:
+  secretName: lab-rockergaming-com-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "*.lab.rockergaming.com"
+  dnsNames:
+  - "lab.rockergaming.com"
+  - "*.lab.rockergaming.com"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: lab-rockergaming-com
+  namespace: traefik
+spec:
+  secretName: lab-rockergaming-com-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "*.lab.rockergaming.com"
+  dnsNames:
+  - "lab.rockergaming.com"
+  - "*.lab.rockergaming.com"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: lab-rockergaming-com
+  namespace: rockergaming
+spec:
+  secretName: lab-rockergaming-com-tls
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "*.lab.rockergaming.com"
+  dnsNames:
+  - "lab.rockergaming.com"
+  - "*.lab.rockergaming.com"

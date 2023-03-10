@@ -1,0 +1,21 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-dobroveanu-cloud-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: edbz2k2@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-dobroveanu-cloud-staging
+    solvers:
+    - dns01:
+        cloudflare:
+          email: edbz2k2@gmail.com
+          apiTokenSecretRef:
+            name: cloudflare-dobroveanu-cloud-api-token-secret
+            key: api-token
+      selector:
+        dnsZones:
+          - "dobroveanu.cloud"
