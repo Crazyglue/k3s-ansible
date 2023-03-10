@@ -1,0 +1,15 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ds-devops-biz
+  namespace: ds-devops
+spec:
+  secretName: ds-devops-biz-tls
+  issuerRef:
+    name: letsencrypt-ds-devops
+    kind: ClusterIssuer
+  commonName: "*.ds-devops.biz"
+  dnsNames:
+  - "ds-devops.biz"
+  - "*.ds-devops.biz"

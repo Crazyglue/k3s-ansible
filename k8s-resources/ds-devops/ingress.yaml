@@ -1,0 +1,26 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ds-devops-landing-page
+  namespace: ds-devops
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`www.ds-devops.biz`)
+      kind: Rule
+      services:
+        - name: ds-devops-landing-page
+          port: 80
+          namespace: ds-devops
+    - match: Host(`ds-devops.biz`)
+      kind: Rule
+      services:
+        - name: ds-devops-landing-page
+          port: 80
+          namespace: ds-devops
+  tls:
+    secretName: ds-devops-biz-tls

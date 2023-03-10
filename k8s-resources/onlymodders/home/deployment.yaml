@@ -1,0 +1,26 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: only-modders-home
+  namespace: only-modders
+  labels:
+    app: only-modders-home
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: only-modders-home
+  template:
+    metadata:
+      labels:
+        app: only-modders-home
+    spec:
+      containers:
+      - name: only-modders-home
+        image: registry.lab.rockergaming.com/only-modders/home:0.0.1
+        imagePullPolicy: Always

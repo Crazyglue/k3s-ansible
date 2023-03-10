@@ -1,0 +1,28 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: rockergaming-client
+  namespace: rockergaming
+  labels:
+    app: rockergaming-client
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rockergaming-client
+  template:
+    metadata:
+      labels:
+        app: rockergaming-client
+    spec:
+      containers:
+      - name: rockergaming-client
+        image: registry.lab.rockergaming.com/rockergaming/client:latest
+        env:
+          - name: NODE_ENV
+            value: development

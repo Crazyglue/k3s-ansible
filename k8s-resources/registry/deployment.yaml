@@ -1,0 +1,37 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: container-registry
+  namespace: container-registry
+  labels:
+    app: container-registry
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: container-registry
+  template:
+    metadata:
+      labels:
+        app: container-registry
+    spec:
+      containers:
+      - name: registry
+        image: registry:2
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+            # name must match the volume name below
+            - name: nfs
+              mountPath: "/var/lib/registry"
+      volumes:
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: registry-nfs
+      securityContext:
+        fsGroup: 1000

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: registry-nfs
+  namespace: container-registry
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: "slow"
+  resources:
+    requests:
+      storage: 50Gi
+  volumeName: truenas-rockergaming

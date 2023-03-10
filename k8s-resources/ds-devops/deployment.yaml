@@ -1,0 +1,26 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ds-devops-landing-page
+  namespace: ds-devops
+  labels:
+    app: ds-devops-landing-page
+spec:
+  replicas: 1
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: ds-devops-landing-page
+  template:
+    metadata:
+      labels:
+        app: ds-devops-landing-page
+    spec:
+      containers:
+      - name: ds-devops-landing-page
+        image: registry.lab.rockergaming.com/ds-devops/landing-page:0.3.42
+        imagePullPolicy: Always

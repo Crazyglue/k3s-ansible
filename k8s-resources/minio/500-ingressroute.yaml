@@ -1,0 +1,26 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio-s3
+  namespace: rockergaming
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`s3.lab.rockergaming.com`)
+      kind: Rule
+      services:
+        - name: minio
+          port: 9000
+          namespace: rockergaming
+    - match: Host(`s3-console.lab.rockergaming.com`)
+      kind: Rule
+      services:
+        - name: minio
+          port: 9001
+          namespace: rockergaming
+  tls:
+    secretName: lab-rockergaming-com-tls

@@ -1,0 +1,24 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: edbz2k2@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-production
+    solvers:
+      - dns01:
+          route53:
+            region: us-east-2
+            hostedZoneID: Z00276873KV8H21CJ5ETU
+            accessKeyID: AKIA6IX2B5SFX7EPCOX4
+            secretAccessKeySecretRef:
+              name: route-53-credentials-secret
+              key: secret-access-key
+        selector:
+          dnsZones:
+            - "lab.rockergaming.com"
+        
