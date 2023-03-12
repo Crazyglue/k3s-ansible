@@ -68,6 +68,7 @@ kubeControllerManager:
     - 192.168.1.181
     - 192.168.1.182
     - 192.168.1.183
+    - 192.168.1.184
 
 coreDns:
   enabled: true
@@ -82,6 +83,7 @@ kubeEtcd:
     - 192.168.1.181
     - 192.168.1.182
     - 192.168.1.183
+    - 192.168.1.184
   service:
     enabled: true
     port: 2381
@@ -94,6 +96,7 @@ kubeScheduler:
     - 192.168.1.181
     - 192.168.1.182
     - 192.168.1.183
+    - 192.168.1.184
 
 kubeProxy:
   enabled: true
@@ -102,6 +105,7 @@ kubeProxy:
     - 192.168.1.181
     - 192.168.1.182
     - 192.168.1.183
+    - 192.168.1.184
 
 kubeStateMetrics:
   enabled: true
