@@ -27,11 +27,24 @@ spec:
         - containerPort: 5000
         volumeMounts:
             # name must match the volume name below
-            - name: nfs
+            - name: registry-storage
               mountPath: "/var/lib/registry"
       volumes:
-      - name: nfs
+      - name: registry-storage
         persistentVolumeClaim:
-          claimName: registry-nfs
+          claimName: registry-storage
       securityContext:
         fsGroup: 1000
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: registry-storage
+  namespace: container-registry
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 50Gi

@@ -16,7 +16,8 @@ deployment:
 
 ports:
   web:
-    redirectTo: websecure
+    redirectTo: 
+      port: websecure
   websecure:
     tls:
       enabled: true
@@ -24,14 +25,16 @@ ports:
     port: 5000
     exposedPort: 5000
     protocol: TCP
-    expose: true
+    expose: 
+      default: true
     tls:
       enabled: true
   postgres:
     port: 5432
     exposedPort: 5432
     protocol: TCP
-    expose: true
+    expose: 
+      default: true
       
 ingressRoute:
   dashboard:
