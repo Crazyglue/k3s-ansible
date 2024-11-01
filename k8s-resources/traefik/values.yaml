@@ -1,6 +1,8 @@
 globalArguments:
   - "--global.sendanonymoususage=false"
   - "--global.checknewversion=false"
+  - "--providers.kubernetesingress.allowexternalnameservices"
+  - "--providers.kubernetescrd.allowexternalnameservices"
 
 additionalArguments:
   - "--serversTransport.insecureSkipVerify=true"

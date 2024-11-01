@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: overseer
+  namespace: dobroveanu-cloud
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`requests.dobroveanu.cloud`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: overseer
+          namespace: dobroveanu-cloud
+          port: 5055
+  tls:
+    secretName: dobroveanu-cloud-tls
